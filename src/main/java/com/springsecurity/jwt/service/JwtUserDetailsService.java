@@ -1,11 +1,14 @@
 package com.springsecurity.jwt.service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.springsecurity.jwt.entity.User;
 import com.springsecurity.jwt.modal.UserDTO;
 import com.springsecurity.jwt.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,6 +25,8 @@ Also the password for a user is stored in encrypted format using BCrypt.
 Previously we have seen Spring Boot Security - Password Encoding Using Bcrypt.
 Here using the Online Bcrypt Generator you can generate the Bcrypt for a password.
  */
+
+
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
@@ -34,11 +39,15 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
+
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                new ArrayList<>());
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                AuthorityUtils.createAuthorityList(user.getAuthorities()));
     }
 
     public User save(UserDTO userDTO) {
@@ -48,5 +57,4 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         return userRepository.save(newUser);
     }
-
 }

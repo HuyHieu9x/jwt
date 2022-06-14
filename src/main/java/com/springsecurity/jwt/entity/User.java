@@ -16,6 +16,9 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @Column
+    private String authorities;
+
     public String getUsername() {
         return username;
     }
@@ -30,5 +33,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(String authorities) {
+        this.authorities = authorities;
     }
 }

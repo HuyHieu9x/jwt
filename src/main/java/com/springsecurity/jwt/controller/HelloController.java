@@ -7,9 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-   @GetMapping(value = "/hello")
+   @GetMapping(value = "/admin")
     public String firstPage() {
-        return "Hello World";
+        return "Hello World Admin authorization";
+    }
+
+    @GetMapping(value = "/user")
+    public String userPage(){
+       return "Hello User page";
     }
 
 }
